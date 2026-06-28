@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendário de Atividades 2026 - ARQPASSAGEM</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation and Info Panel -->
+    <aside class="sidebar">
+      
+      <!-- ARQPASSAGEM SVG Logo (Vetorizado em Alta Qualidade) -->
+      <div class="logo-container">
+        <img src="img/logo.png" alt="Logo ARQPASSAGEM" class="logo-arq">
+
+        <h1 class="logo-title">Quilombo de Passagem</h1>
+        <span class="logo-subtitle">Monte Alegre - PA</span>
+      </div>
+
+      <!-- Community Visual Cover -->
+      <div class="illustration-box">
+        <img src="img/img.png" alt="Ilustração Comunidade Quilombo de Passagem">
+      </div>
+
+      <!-- Info Box -->
+      <div class="course-info">
+        <h3>Calendário 2026</h3>
+        <p>Espaço de planejamento e organização da comunidade. Acompanhe os mutirões, assembleias gerais, reuniões de planejamento e as festividades da associação.</p>
+      </div>
+
+      <!-- Event Counters Dashboard -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span id="stat-reuniao" class="stat-number">0</span>
+          <span class="stat-label">Reuniões</span>
+        </div>
+        <div class="stat-card">
+          <span id="stat-assembleia" class="stat-number">0</span>
+          <span class="stat-label">Assembleias</span>
+        </div>
+        <div class="stat-card">
+          <span id="stat-mutirao" class="stat-number">0</span>
+          <span class="stat-label">Mutirões</span>
+        </div>
+        <div class="stat-card">
+          <span id="stat-festividade" class="stat-number">0</span>
+          <span class="stat-label">Festas</span>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- Main Panel Dashboard -->
+    <main class="main-panel">
+      
+      <!-- Top Action Bar controls -->
+      <header class="header-controls">
+        <div class="nav-actions">
+          <button id="btn-prev" class="btn" aria-label="Mês Anterior">
+            ← Ant.
+          </button>
+          <button id="btn-today" class="btn btn-primary">
+            Hoje
+          </button>
+          <button id="btn-next" class="btn" aria-label="Próximo Mês">
+            Próx. →
+          </button>
+        </div>
+
+        <h3 id="month-title" style="font-size: 1.4rem; font-family: 'Playfair Display', serif; color: var(--color-maroon-dark);">
+          Carregando...
+        </h3>
+
+        <div style="display: flex; gap: 1rem; align-items: center;">
+          <!-- View Toggle Switcher -->
+          <div class="view-toggles">
+            <button id="toggle-grid" class="toggle-btn active">Grade</button>
+            <button id="toggle-list" class="toggle-btn">Lista</button>
+          </div>
+
+          <!-- Print / Action Trigger -->
+          <button id="btn-print" class="btn btn-orange">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+              <path d="M6 14h12v8H6z" />
+            </svg>
+            Imprimir
+          </button>
+        </div>
+      </header>
+
+      <!-- Monthly Banner Section -->
+      <section id="monthly-banner-container">
+        <!-- Will be rendered dynamically via JS -->
+      </section>
+
+      <!-- Decorative Adinkra border divider -->
+      <div class="adinkra-divider">
+        <!-- Sankofa -->
+        <svg viewBox="0 0 24 24" class="adinkra-icon" width="24" height="24">
+          <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"/>
+        </svg>
+        <!-- Sankofa Heart -->
+        <svg viewBox="0 0 24 24" class="adinkra-icon" width="24" height="24">
+          <path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"/>
+        </svg>
+        <!-- Dwennimmen (Rams horns) -->
+        <svg viewBox="0 0 24 24" class="adinkra-icon" width="24" height="24">
+          <path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm0 2c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm1 3v4h3v2h-3v4h-2v-4H8v-2h3V7h2z"/>
+        </svg>
+        <!-- Sankofa Heart -->
+        <svg viewBox="0 0 24 24" class="adinkra-icon" width="24" height="24">
+          <path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"/>
+        </svg>
+        <!-- Sankofa -->
+        <svg viewBox="0 0 24 24" class="adinkra-icon" width="24" height="24">
+          <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"/>
+        </svg>
+      </div>
+
+      <!-- Main Dynamic Content Grid/List Area -->
+      <section id="calendar-content-area">
+        <!-- Rendered via App.js -->
+      </section>
+
+      <!-- Page bottom signatures -->
+      <footer style="margin-top: auto; display: flex; justify-content: space-between; align-items: center; padding-top: 1.5rem; border-top: 1.5px solid var(--color-cream-dark);">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <svg viewBox="0 0 24 24" fill="var(--color-maroon)" width="20" height="20">
+            <path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"/>
+          </svg>
+          <span style="font-weight: 800; font-size: 0.8rem; letter-spacing: 0.5px; color: var(--color-maroon);">ARQPASSAGEM - GESTÃO COMUNITÁRIA</span>
+        </div>
+        <span style="font-weight: 600; font-size: 0.8rem; color: var(--color-text-light);">Monte Alegre - Pará</span>
+      </footer>
+
+    </main>
+
+    <!-- Detail & Note Modal Overlay -->
+    <div id="modal-overlay" class="modal-overlay">
+      <div class="modal-content">
+        
+        <header class="modal-header">
+          <div class="modal-pattern-top" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%2212%22 viewBox=%220 0 100 12%22 fill=%22%23f4cb2b%22><path d=%22M12.5,1C6.6,1 2.5,3 2.5,6c0,3 4.1,5 10,5c5.9,0 10,-2 10,-5c0,-3 -4.1,-5 -10,-5zm25,0c-4.1,0 -7.5,1.5 -7.5,3.5c0,2 3.4,3.5 7.5,3.5c4.1,0 7.5,-1.5 7.5,-3.5c0,-2 -3.4,-3.5 -7.5,-3.5z%22/></svg>')"></div>
+          <div class="modal-title-box">
+            <span id="modal-date" class="modal-date-text">DATA</span>
+            <h4 class="modal-title">Atividades do Dia</h4>
+          </div>
+          <button id="modal-close" class="modal-close" aria-label="Fechar">&times;</button>
+        </header>
+
+        <div class="modal-body">
+          <!-- List of events on this day -->
+          <div id="modal-events-list-container" class="modal-events-list">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <!-- Form to add new custom event -->
+          <form class="form-section">
+            <h5 class="form-title">Agendar Novo Evento</h5>
+            
+            <div class="form-group">
+              <label class="form-label" for="form-event-title">Título do Evento</label>
+              <input type="text" id="form-event-title" class="form-input" placeholder="Ex: Mutirão da Roça, Assembleia Geral...">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
+              <div class="form-group">
+                <label class="form-label" for="form-event-type">Tipo de Evento</label>
+                <select id="form-event-type" class="form-select">
+                  <option value="reuniao">Reunião (Vinho)</option>
+                  <option value="assembleia">Assembleia (Laranja)</option>
+                  <option value="mutirao">Mutirão (Verde)</option>
+                  <option value="festividade">Festividade (Dourado)</option>
+                  <option value="outro">Outro (Azul)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="form-event-desc">Descrição / Horário</label>
+              <textarea id="form-event-desc" class="form-textarea" placeholder="Ex: Início às 08:00 na sede. Pauta: prestação de contas. Trazer ferramentas..."></textarea>
+            </div>
+
+            <button type="submit" id="btn-add-event-form" class="btn btn-orange" style="margin-top: 0.25rem; justify-content: center;">
+              Agendar Atividade
+            </button>
+          </form>
+        </div>
+
+        <footer class="modal-footer">
+          <button id="btn-modal-cancel" class="btn btn-primary">Fechar</button>
+        </footer>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/calendario.js"></script>
+</body>
+</html>
