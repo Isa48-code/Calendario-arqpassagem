@@ -82,13 +82,11 @@ body {
 }
 
 .logo-arq {
-    width: 140px;
-    height: 140px;
-    object-fit: contain;
-    display: block;
-    margin-bottom: 0.75rem;
-    
+  width: 140px;
+  height: 140px;
+  margin-bottom: 0.75rem;
 }
+
 .logo-title {
   font-family: 'Playfair Display', serif;
   font-size: 1.25rem;
@@ -879,6 +877,11 @@ body {
 }
 
 /* Responsive Styles */
+.header-short {
+  display: none;
+}
+
+/* Responsive Styles */
 @media (max-width: 1024px) {
   .app-container {
     grid-template-columns: 1fr;
@@ -886,7 +889,8 @@ body {
   
   .sidebar {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    max-height: 450px;
+    max-height: 400px;
+    padding: 1.5rem;
   }
   
   .stats-grid {
@@ -917,29 +921,103 @@ body {
     width: 100%;
   }
   
+  .banner-month-name {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .header-full {
+    display: none;
+  }
+  
+  .header-short {
+    display: inline;
+  }
+  
   .calendar-grid {
-    grid-template-columns: repeat(4, 1fr); /* 4 columns on tablet */
+    grid-template-columns: repeat(7, 1fr) !important; /* STRICTLY 7 columns to prevent scrambling */
+    gap: 0.25rem;
   }
   
   .weekday-header {
     font-size: 0.75rem;
-    padding: 0.5rem;
+    padding: 0.4rem 0.1rem;
+    letter-spacing: 0;
   }
   
   .date-cell {
-    min-height: 110px;
-    padding: 0.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .calendar-grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile */
+    min-height: 70px;
+    padding: 0.25rem;
+    border-radius: var(--radius-sm);
+    justify-content: space-between;
   }
   
+  .date-number {
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+  }
+  
+  /* Compact event dots for mobile */
+  .event-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3px;
+    max-height: 22px;
+    overflow: hidden;
+    align-items: center;
+    margin-top: auto;
+  }
+  
+  .event-card {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full) !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .event-card span,
+  .event-card svg {
+    display: none !important;
+  }
+  
+  /* Force event background colors on mobile dots */
+  .event-reuniao { background-color: var(--color-maroon) !important; }
+  .event-assembleia { background-color: var(--color-orange) !important; }
+  .event-mutirao { background-color: var(--color-green) !important; }
+  .event-festividade { background-color: var(--color-gold) !important; }
+  .event-outro { background-color: var(--color-blue) !important; }
+  .event-feriado { background-color: var(--color-text-light) !important; }
+
+  /* Mobile bottom sheet drawer for modal */
+  .modal-overlay {
+    align-items: flex-end;
+  }
+  
+  .modal-content {
+    width: 100%;
+    max-width: 100%;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    transform: translateY(100%);
+    transition: transform var(--transition-normal);
+    border: none;
+    border-top: 5px solid var(--color-gold);
+  }
+  
+  .modal-overlay.active .modal-content {
+    transform: translateY(0);
+  }
+
   .header-controls {
     flex-direction: column;
     align-items: stretch;
+    gap: 1rem;
   }
   
   .nav-actions {
@@ -1074,6 +1152,7 @@ body {
   }
 }
 
+
 .logo-container img{
     width:160px;
     padding:12px;
@@ -1081,3 +1160,5 @@ body {
     border-radius:50%;
     box-shadow:0 8px 25px rgba(0,0,0,.25);
 }
+
+ 

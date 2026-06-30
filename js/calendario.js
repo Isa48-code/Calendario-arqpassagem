@@ -1,5 +1,31 @@
 // ARQPASSAGEM Event Calendar 2026 - Core Logic
-// Supports 12-month calendar, Brazilian holidays, and full CRUD custom events in localStorage.
+// Supports 12-month calendar, Brazilian holidays, localStorage cache, and Firebase Realtime Database Sync.
+
+// Firebase Configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyB6O7qFDw73uHA45OGFb6uni-NVcOGvgTw",
+  authDomain: "calendario-arqpassagem.firebaseapp.com",
+  projectId: "calendario-arqpassagem",
+  databaseURL: "https://calendario-arqpassagem-default-rtdb.firebaseio.com",
+  storageBucket: "calendario-arqpassagem.firebasestorage.app",
+  messagingSenderId: "250593887550",
+  appId: "1:250593887550:web:9565297f24c97250b3186f",
+  measurementId: "G-XCYDEJ7G0S"
+};
+
+let isFirebaseActive = false;
+let dbRef = null;
+
+if (typeof firebase !== 'undefined' && firebaseConfig.apiKey && firebaseConfig.apiKey !== "SUA_API_KEY") {
+  try {
+    firebase.initializeApp(firebaseConfig);
+    dbRef = firebase.database().ref("arq-events");
+    isFirebaseActive = true;
+    console.log("Firebase conectado com sucesso.");
+  } catch (e) {
+    console.error("Erro ao inicializar Firebase:", e);
+  }
+}
 
 // Preloaded standard 2026 Brazilian holidays (plus Dia da Consciência Negra)
 const nationalHolidays = {
@@ -78,8 +104,50 @@ const eventIcons = {
 
 document.addEventListener("DOMContentLoaded", () => {
   setupEventListeners();
-  renderCurrentMonth();
+  
+  if (isFirebaseActive) {
+    // Escuta alterações em tempo real do banco de dados e sincroniza com cache local
+    dbRef.on("value", (snapshot) => {
+      const data = snapshot.val();
+      syncFirebaseToLocalStorage(data);
+      renderCurrentMonth();
+    }, (error) => {
+      console.error("Erro de leitura do Firebase:", error);
+      renderCurrentMonth();
+    });
+  } else {
+    renderCurrentMonth();
+  }
 });
+
+// Helper functions for Firebase-LocalStorage synchronization
+function syncFirebaseToLocalStorage(data) {
+  clearLocalEvents();
+  if (!data) return;
+
+  for (const year in data) {
+    for (const month in data[year]) {
+      for (const day in data[year][month]) {
+        const dayData = data[year][month][day];
+        if (dayData) {
+          const eventsArray = Object.values(dayData);
+          localStorage.setItem(`arq-events-${year}-${month}-${day}`, JSON.stringify(eventsArray));
+        }
+      }
+    }
+  }
+}
+
+function clearLocalEvents() {
+  const keysToRemove = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.startsWith("arq-events-")) {
+      keysToRemove.push(key);
+    }
+  }
+  keysToRemove.forEach(key => localStorage.removeItem(key));
+}
 
 function setupEventListeners() {
   document.getElementById("btn-prev").addEventListener("click", navigatePrev);
@@ -231,11 +299,22 @@ function renderGridView(container, daysInMonth, startOffset) {
   gridWrapper.className = "calendar-grid animate-fade";
 
   // Weekdays (DOM to SAB)
-  const weekdays = ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SAB"];
+  const weekdays = [
+    { full: "DOM", short: "D" },
+    { full: "SEG", short: "S" },
+    { full: "TER", short: "T" },
+    { full: "QUA", short: "Q" },
+    { full: "QUI", short: "Q" },
+    { full: "SEX", short: "S" },
+    { full: "SAB", short: "S" }
+  ];
   weekdays.forEach((day, index) => {
     const header = document.createElement("div");
     header.className = `weekday-header${index === 0 ? ' sunday' : ''}`;
-    header.textContent = day;
+    header.innerHTML = `
+      <span class="header-full">${day.full}</span>
+      <span class="header-short">${day.short}</span>
+    `;
     gridWrapper.appendChild(header);
   });
 
@@ -458,21 +537,38 @@ function addCustomEvent(e) {
   const customEvents = JSON.parse(localStorage.getItem(customEventsKey)) || [];
 
   const newEvent = {
-    id: Date.now().toString(), // unique id
+    id: Date.now().toString(), // local fallback id
     type: type,
     title: title,
     desc: desc || "Nenhuma descrição detalhada fornecida."
   };
 
-  customEvents.push(newEvent);
-  localStorage.setItem(customEventsKey, JSON.stringify(customEvents));
+  if (isFirebaseActive) {
+    const dayRef = dbRef.child(`${currentYear}/${currentMonthIndex}/${selectedDay}`);
+    const newEventRef = dayRef.push();
+    newEvent.id = newEventRef.key;
+    newEventRef.set(newEvent)
+      .then(() => {
+        closeModal();
+      })
+      .catch(err => {
+        console.error("Erro ao salvar no Firebase:", err);
+        alert("Erro de conexão ao banco de dados online. O evento foi salvo localmente temporariamente.");
+        saveLocalFallback(customEventsKey, customEvents, newEvent);
+      });
+  } else {
+    saveLocalFallback(customEventsKey, customEvents, newEvent);
+  }
 
   // Reset inputs
   titleInput.value = "";
   descInput.value = "";
+}
 
-  // Update views
-  renderModalEvents();
+function saveLocalFallback(key, list, item) {
+  list.push(item);
+  localStorage.setItem(key, JSON.stringify(list));
+  closeModal();
   renderCurrentMonth();
 }
 
@@ -480,9 +576,24 @@ function addCustomEvent(e) {
 function deleteCustomEvent(eventId) {
   if (selectedDay === null) return;
 
+  if (isFirebaseActive) {
+    dbRef.child(`${currentYear}/${currentMonthIndex}/${selectedDay}/${eventId}`).remove()
+      .then(() => {
+        renderModalEvents();
+      })
+      .catch(err => {
+        console.error("Erro ao deletar no Firebase:", err);
+        alert("Erro de conexão. Deletando localmente.");
+        deleteLocalFallback(eventId);
+      });
+  } else {
+    deleteLocalFallback(eventId);
+  }
+}
+
+function deleteLocalFallback(eventId) {
   const customEventsKey = `arq-events-${currentYear}-${currentMonthIndex}-${selectedDay}`;
   let customEvents = JSON.parse(localStorage.getItem(customEventsKey)) || [];
-
   customEvents = customEvents.filter(evt => evt.id !== eventId);
 
   if (customEvents.length === 0) {
@@ -491,7 +602,6 @@ function deleteCustomEvent(eventId) {
     localStorage.setItem(customEventsKey, JSON.stringify(customEvents));
   }
 
-  // Update views
   renderModalEvents();
   renderCurrentMonth();
 }
